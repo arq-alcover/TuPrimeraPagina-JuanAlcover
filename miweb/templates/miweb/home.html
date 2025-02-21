@@ -1,0 +1,39 @@
+{% extends 'miweb/base.html' %}
+
+{% block content %}
+<section class="latest-posts">
+    <h2 class="mb-4 text-center"><i class="fas fa-newspaper me-2"></i>Últimos Artículos</h2>
+    
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for post in posts %}
+        <div class="col">
+            <div class="card h-100 shadow card-hover">
+                {% if post.imagen_portada %}
+                <img 
+                    src="{{ post.imagen_portada.url }}" 
+                    class="card-img-top"
+                    alt="{{ post.titulo }}"
+                    style="height: 200px; object-fit: cover;"
+                >
+                {% endif %}
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">{{ post.titulo }}</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ post.contenido|truncatechars:150 }}</p>
+                    <div class="badge bg-secondary">{{ post.categoria.nombre }}</div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <small class="text-muted">
+                        Publicado el {{ post.fecha_publicacion|date:"d/m/Y" }}
+                    </small>
+                    <a href="{% url 'detalle_post' post.id %}" class="btn btn-sm btn-primary float-end">
+                        Leer más <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

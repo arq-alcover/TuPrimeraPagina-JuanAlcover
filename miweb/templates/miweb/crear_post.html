@@ -1,0 +1,88 @@
+{% extends 'miweb/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0"><i class="fas fa-pen-alt me-2"></i>Crear Nuevo Artículo</h2>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Sección Principal -->
+                        <div class="mb-4">
+                            <label for="id_titulo" class="form-label">Título del Artículo</label>
+                            {{ form.titulo }}
+                        </div>
+
+                        <!-- Editor de Contenido -->
+                        <div class="mb-4">
+                            <label for="id_contenido" class="form-label">Cuerpo del Artículo</label>
+                            {{ form.contenido }}
+                            <small class="form-text text-muted">Utiliza formato Markdown para enriquecer tu texto</small>
+                        </div>
+
+                        <!-- Sección Multimedia -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="id_imagen_portada" class="form-label">Imagen de Portada</label>
+                                {{ form.imagen_portada }}
+                            </div>
+                        </div>
+                        <!-- Botones de Acción -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-save me-2"></i>Publicar Artículo
+                            </button>
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg">
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .editor-textarea {
+        min-height: 300px;
+        font-family: 'Courier New', monospace;
+        font-size: 1rem;
+    }
+    .image-preview {
+        max-width: 200px;
+        margin: 1rem 0;
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Vista previa de la imagen seleccionada
+    document.getElementById('id_imagen_portada').addEventListener('change', function(e) {
+        const preview = document.createElement('img');
+        preview.className = 'image-preview img-thumbnail';
+        preview.src = URL.createObjectURL(e.target.files[0]);
+        preview.style.display = 'block';
+        this.parentNode.appendChild(preview);
+    });
+
+    // Inicializar datepicker
+    flatpickr('#id_fecha_publicacion', {
+        enableTime: true,
+        dateFormat: "d/m/Y H:i",
+        locale: "es",
+        time_24hr: true
+    });
+</script>
+{% endblock %}
