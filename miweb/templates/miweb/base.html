@@ -28,7 +28,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">Acerca de</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'message_list' %}">Mensajes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'messaging:message_list' %}">Mensajes</a></li>
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Perfil</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a></li>

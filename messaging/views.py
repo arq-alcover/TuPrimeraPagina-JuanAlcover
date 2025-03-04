@@ -23,7 +23,7 @@ def send_message(request):
             message = form.save(commit=False)
             message.sender = request.user 
             message.save()
-            return redirect("message_list")  
+            return redirect("messaging:message_list")  
     else:
         form = MessageForm()
 
