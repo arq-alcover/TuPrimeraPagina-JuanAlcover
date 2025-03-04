@@ -2,6 +2,15 @@ from django import forms
 from .models import Post, Categoria, Comentario
 
 class PostForm(forms.ModelForm):
+    etiquetas = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ej: Tecnología, Viajes...'
+        }),
+        help_text="Escribe las etiquetas separadas por comas."
+    )
+
     class Meta:
         model = Post
         fields = ['titulo', 'contenido', 'imagen_portada', 'categoria', 'etiquetas']
@@ -22,18 +31,19 @@ class PostForm(forms.ModelForm):
                 'rows': 5,
                 'placeholder': 'Escribe el contenido del post...'
             }),
-            'imagen_portada': forms.FileInput(attrs={
+            'imagen_portada': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
                 'accept': 'image/*'
             }),
             'categoria': forms.Select(attrs={
                 'class': 'form-select'
-            }),
-            'etiquetas': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Ej: Tecnología, Viajes...'
             })
         }
+
+    def clean_etiquetas(self):
+        """Convierte la cadena de etiquetas separadas por comas en una lista sin espacios extra"""
+        etiquetas = self.cleaned_data.get('etiquetas', '')
+        return [etiqueta.strip() for etiqueta in etiquetas.split(',') if etiqueta.strip()]
 
 class CategoriaForm(forms.ModelForm):
     class Meta:

@@ -1,0 +1,57 @@
+{% extends "miweb/base.html" %}
+
+{% block title %}Mensajes{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Mensajes</h2>
+
+    <div class="row">
+        <!-- Mensajes Recibidos -->
+        <div class="col-md-6">
+            <h4 class="text-center text-primary">Mensajes Recibidos</h4>
+            {% if messages_received %}
+                <div class="list-group mt-3">
+                    {% for message in messages_received %}
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ message.sender.username }}</h5>
+                                <small class="text-muted">{{ message.timestamp|date:"d/m/Y H:i" }}</small>
+                            </div>
+                            <p class="mb-1">{{ message.content }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-muted mt-3">No tienes mensajes recibidos.</p>
+            {% endif %}
+        </div>
+
+        <!-- Mensajes Enviados -->
+        <div class="col-md-6">
+            <h4 class="text-center text-success">Mensajes Enviados</h4>
+            {% if messages_sent %}
+                <div class="list-group mt-3">
+                    {% for message in messages_sent %}
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Para: {{ message.receiver.username }}</h5>
+                                <small class="text-muted">{{ message.timestamp|date:"d/m/Y H:i" }}</small>
+                            </div>
+                            <p class="mb-1">{{ message.content }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-muted mt-3">No has enviado mensajes.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'send_message' %}" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> Enviar Mensaje
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,4 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
+import os
+
+# Función para almacenar imágenes sin subcarpetas
+def upload_to_media(instance, filename):
+    return filename
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100, unique=True, verbose_name="Nombre de categoría")
@@ -11,10 +17,11 @@ class Categoria(models.Model):
         return self.nombre
 
 class Post(models.Model):
+    autor = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Autor")
     titulo = models.CharField(max_length=200, verbose_name="Título")
     contenido = models.TextField(verbose_name="Contenido")
     imagen_portada = models.ImageField(
-        upload_to='posts/',
+        upload_to=upload_to_media,  # Guarda las imágenes sin subcarpetas
         verbose_name="Imagen de Portada",
         null=True,
         blank=True,
@@ -41,6 +48,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.titulo
+
+    @property
+    def imagen_url(self):
+        """Devuelve la URL de la imagen de portada o una imagen por defecto si no tiene."""
+        if self.imagen_portada and hasattr(self.imagen_portada, 'url'):
+            return self.imagen_portada.url
+        return "/static/images/default-post.jpg"  # Imagen por defecto para posts sin imagen
 
 class Comentario(models.Model):
     post = models.ForeignKey(

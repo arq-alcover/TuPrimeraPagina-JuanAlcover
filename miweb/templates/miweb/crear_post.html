@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        
+
                         <!-- Sección Principal -->
                         <div class="mb-4">
                             <label for="id_titulo" class="form-label">Título del Artículo</label>
@@ -32,8 +32,16 @@
                             <div class="col-md-6">
                                 <label for="id_imagen_portada" class="form-label">Imagen de Portada</label>
                                 {{ form.imagen_portada }}
+                                <img id="image-preview" 
+                                     class="image-preview img-thumbnail mt-2" 
+                                     style="display: {% if form.instance.imagen_portada %}block{% else %}none{% endif %}; max-width: 100%;" 
+                                     {% if form.instance.imagen_portada %}
+                                         src="{{ form.instance.imagen_portada.url }}"
+                                     {% endif %}
+                                >
                             </div>
                         </div>
+
                         <!-- Botones de Acción -->
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="submit" class="btn btn-success btn-lg">
@@ -70,19 +78,23 @@
 <script>
     // Vista previa de la imagen seleccionada
     document.getElementById('id_imagen_portada').addEventListener('change', function(e) {
-        const preview = document.createElement('img');
-        preview.className = 'image-preview img-thumbnail';
-        preview.src = URL.createObjectURL(e.target.files[0]);
-        preview.style.display = 'block';
-        this.parentNode.appendChild(preview);
+        let preview = document.getElementById('image-preview');
+        if (e.target.files.length > 0) {
+            preview.src = URL.createObjectURL(e.target.files[0]);
+            preview.style.display = 'block';
+        } else {
+            preview.style.display = 'none';
+        }
     });
 
-    // Inicializar datepicker
-    flatpickr('#id_fecha_publicacion', {
-        enableTime: true,
-        dateFormat: "d/m/Y H:i",
-        locale: "es",
-        time_24hr: true
-    });
+    // Inicializar datepicker solo si existe el campo de fecha
+    if (document.getElementById('id_fecha_publicacion')) {
+        flatpickr('#id_fecha_publicacion', {
+            enableTime: true,
+            dateFormat: "d/m/Y H:i",
+            locale: "es",
+            time_24hr: true
+        });
+    }
 </script>
 {% endblock %}

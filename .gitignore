@@ -283,3 +283,8 @@ pyrightconfig.json
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django,visualstudiocode
+
+# IGNORAR BASE DE DATOS Y MEDIA 
+db.sqlite3
+db.sqlite3-journal
+media/

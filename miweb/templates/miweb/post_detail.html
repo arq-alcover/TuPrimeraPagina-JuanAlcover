@@ -1,0 +1,57 @@
+{% extends "miweb/base.html" %}
+
+{% block title %}{{ post.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h3>{{ post.titulo }}</h3>
+        </div>
+        <div class="card-body text-center">
+
+            <!-- Depuración: Mostrar la ruta de la imagen -->
+            <p><strong>Ruta de la imagen:</strong> 
+                <code>
+                    {% if post.imagen_portada %}
+                        {{ post.imagen_portada.url }}
+                    {% else %}
+                        No hay imagen disponible
+                    {% endif %}
+                </code>
+            </p>
+
+            <!-- Mostrar la imagen de portada si existe -->
+            {% if post.imagen_portada %}
+                <img src="{{ post.imagen_portada.url }}" 
+                     alt="Imagen de {{ post.titulo }}" 
+                     class="img-fluid rounded mx-auto d-block border border-secondary"
+                     style="max-width: 600px;">
+            {% else %}
+                <p class="text-muted">Este post no tiene imagen de portada.</p>
+            {% endif %}
+
+            <!-- Fecha de publicación -->
+            <p class="text-muted mt-3"><small>Publicado el {{ post.fecha_publicacion|date:"d M Y" }}</small></p>
+            
+            <!-- Contenido del post -->
+            <p class="mt-3">{{ post.contenido }}</p>
+        </div>
+
+        <div class="card-footer text-center">
+            <a href="{% url 'post_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver a la lista
+            </a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'post_update' post.pk %}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Eliminar
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
